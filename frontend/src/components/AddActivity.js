@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 
-const AddActivity = ({ storeActivity }) => {
+const AddActivity = ({ storeActivity, setScreen }) => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     
-    const saveActivity = () => {
+    const addActivity = () => {
         storeActivity({ title, description })
+        setScreen('activities')        
     }
 
     return(
@@ -15,7 +16,7 @@ const AddActivity = ({ storeActivity }) => {
             <h2>Activity description</h2>      
             <textarea onChange={event => setDescription(event.target.value)}></textarea>
             <p></p>
-            <button onClick={saveActivity}> Save Activity </button>
+            <button onClick={addActivity}> Save Activity </button>
         </div>
       
     )

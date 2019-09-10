@@ -63,7 +63,7 @@ body button {
   color: #fff;
   border-color: transparent;
   height: 15vmin;
-  width: 30vmin;
+  width: 25vmin;
 }
 
  button:hover{
@@ -93,4 +93,15 @@ body button {
 
 .AddActivity button, .AddActivity textarea, .AddActivity input, .AddActivity h2 {
   display: block;
+}
+
+.MenuToggle {
+  display: block;
+  width: 33px;
+  height: 4px;
+  margin-bottom: 5px;
+  position: relative;
+  background: lightblue;
+  border-radius: 3px;
+  z-index: 1;  
 }
