@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import {css, jsx} from '@emotion/core'
 
-const SidebarMobile = ({ showActivities, setShowActivities }) => {
+const SidebarMobile = ({ showActivities, setShowActivities, setScreen }) => {
 
     return(        
           <ul css={css`
@@ -26,7 +26,7 @@ const SidebarMobile = ({ showActivities, setShowActivities }) => {
             <span className="MenuToggle"></span>
             <span className="MenuToggle"></span>
           </div>
-        </ul>
+        </ul>     
     )
   }
 

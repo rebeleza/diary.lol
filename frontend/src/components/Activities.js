@@ -34,7 +34,8 @@ const Activities = ({ setScreen, activities }) => {
           
           <SidebarMobile 
             showActivities={showActivities} 
-            setShowActivities={setShowActivities}/>            
+            setShowActivities={setShowActivities}
+            setScreen={setScreen}/>            
 
           <Detail 
             showActivities={showActivities} 
