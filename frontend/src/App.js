@@ -37,7 +37,7 @@ const storeActivity = async (activity) => {
 }
 
 const App = () => {
-  const [screen, setScreen] = useState('addActivity')
+  const [screen, setScreen] = useState('activities')
   const [activities, setActivities] = useState([])
   
   useEffect(() => {
@@ -45,7 +45,7 @@ const App = () => {
         const activities = await initActivities()
         setActivities(activities)
     })();
-  })  
+  }, [])  
 
   return (
     <div className="App">

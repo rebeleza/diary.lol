@@ -2,14 +2,14 @@ import {useState} from 'react'
 
 /** @jsx jsx */
 import {css, jsx} from '@emotion/core'
-import Detail from './Activities/Detail.js';
+import ActivityDetail from './ActivityDetail/ActivityDetail.js';
 import SidebarMobile from './Activities/SidebarMobile.js';
 import ActivitiesList from './Activities/ActivitiesList.js';
 
 const Activities = ({ setScreen, activities }) => {
 
     const [showActivities,setShowActivities] = useState(false)
-    const [currentActivity, setCurrentActivity] = useState({})
+    const [currentActivity, setCurrentActivity] = useState(null)
 
     return(
         <div className="Activities" css={css`
@@ -37,7 +37,7 @@ const Activities = ({ setScreen, activities }) => {
             setShowActivities={setShowActivities}
             setScreen={setScreen}/>            
 
-          <Detail 
+          <ActivityDetail 
             showActivities={showActivities} 
             currentActivity={currentActivity}/>
         </div>
