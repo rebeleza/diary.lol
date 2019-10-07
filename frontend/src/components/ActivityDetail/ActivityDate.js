@@ -16,13 +16,18 @@ const ActivityDate = ({dateTime} ) => {
            <div css={css`
                 font-size: 4rem;
            `}>
-                {dateTime.getDate()} 
+                {dateTime && dateTime.getDate()} 
             </div>
             <div css={css`
                 font-size: 3rem;
            `}>
-                {monthNames[dateTime.getMonth()]}
+                {dateTime && monthNames[dateTime.getMonth()]}
             </div>
+            <div css={css`
+                font-size: 2rem;
+           `}>
+                { dateTime && dateTime.getHours()+ ':' + dateTime.getMinutes()} 
+            </div>            
         </div>
       
     )

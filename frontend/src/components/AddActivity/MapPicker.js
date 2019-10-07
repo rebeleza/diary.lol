@@ -53,8 +53,8 @@ useEffect(() => {
     return(
         <div className="MapPicker">
             <h2>Choose Location</h2>                  
-            <div id="mapid" css={css`               
-                width: 300px; 
+            <div id="mapid" css={css`                   
+                width: 600px; 
                 height: 300px;
             `}></div>
         </div>

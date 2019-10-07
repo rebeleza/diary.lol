@@ -18,11 +18,8 @@ const initalizeMap = location =>{
             });
             
      mapInstance = L.map('mapid', 
-        {closePopupOnClick: false,
-        boxZoom: false,
-        doubleClickZoom: false,
-        dragging: false,
-        zoomControl: false
+        {closePopupOnClick: false,       
+        doubleClickZoom: false
         }).setView([location.lat
         , location.lng ], 13).addLayer(osm);	
 

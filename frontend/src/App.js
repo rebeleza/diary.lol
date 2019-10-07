@@ -28,6 +28,18 @@ const initActivities = async () => {
   return activities
 }
 
+const getActivities = async () => {
+  let activities = await initActivities()
+
+  //ordernar las actividades
+  activities = activities.sort((a,b) => {
+    return new Date(b.dateTime) + new Date(a.dateTime)
+  })
+  
+
+  return activities
+}
+
 const storeActivity = async (activity) => {
   const db = await initDatabase()
   const tx = await db.transaction(storeName, 'readwrite')
@@ -42,7 +54,7 @@ const App = () => {
   
   useEffect(() => {
     (async () => {
-        const activities = await initActivities()
+        const activities = await getActivities()
         setActivities(activities)
     })();
   }, [])  

@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core'
+import ActivityListDate from './ActivityListDate'
 
 const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurrentActivity, setScreen }) => {
 
@@ -22,8 +23,11 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
         `}>
         {activities.map((activity, index) => {
           return <li key={index} css={css`                    
-                  padding: 20px;
+                  padding: 10px;
+                  
                   border-bottom: 1px solid black;
+                  display: grid;
+                  grid-template-columns: 50px auto;
                   &:hover {
                     background-color: lightblue;                      
                     cursor: pointer;
@@ -35,8 +39,14 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
                 `} onClick={() => {
               setCurrentActivity(activity)
               setShowActivities(false)
-            }}>
-            <div>{activity.title}</div>           
+            }}>           
+              <ActivityListDate dateTime={activity.dateTime} />                                       
+              <div css={css`
+                margin-top:3px;
+                font-size: 1.2rem;
+              `}> 
+                {activity.title}</div>                
+                    
           </li>
         })}
       </ul>
