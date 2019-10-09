@@ -51,11 +51,10 @@ useEffect(() => {
 }, [location, setLocation])  
 
     return(
-        <div className="MapPicker">
-            <h2>Choose Location</h2>                  
+        <div className="MapPicker">          
             <div id="mapid" css={css`                   
-                width: 600px; 
-                height: 300px;
+                width: 100%; 
+                height: 250px;
             `}></div>
         </div>
       

@@ -11,12 +11,10 @@ const DatePicker = ({dateTime, setDateTime} ) => {
     }
     return(
         <div css={ css`
+            margin-top: 30px;
             padding-top: 30px;
-            padding-bottom: 30px;
+            padding-bottom: 30px;            
         `}>      
-        <h2>
-            Choose Date
-        </h2>        
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <DateTimePicker value={dateTime} onChange={setNewDateTime} ampm={false} />
             </MuiPickersUtilsProvider>                        

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import Homepage from './components/Homepage'
-import AddActivity from './components/AddActivity'
+import AddActivity from './components/AddActivity/AddActivity'
 import Activities from './components/Activities'
 import {openDB} from 'idb'
 
@@ -62,6 +62,7 @@ const App = () => {
   return (
     <div className="App">
       {screen === 'homepage' && <Homepage setScreen={setScreen}/>}
+      {screen === 'addActivityFromHomePage' && <AddActivity comingFromHomePage storeActivity={storeActivity} setScreen={setScreen}/>}
       {screen === 'addActivity' && <AddActivity storeActivity={storeActivity} setScreen={setScreen}/>}
       {screen === 'activities' && <Activities setScreen={setScreen} activities={activities}/>}
     </div>

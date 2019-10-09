@@ -14,9 +14,7 @@ body button {
   font-family: 'Fresca', sans-serif;
 }
 
-.App {
-  text-align: center;
-}
+
 
 .Homepage-logo {
   height: 30vmin;
@@ -49,14 +47,17 @@ body button {
 }
 
 .Homepage .container .right p{
+  margin-left: 20px;
   width: 100%;
   max-width: 200px;
   text-align: left;
-  padding-left: 50px;
+  padding-left: 40px;
 }
 
 .Homepage .container .right button{
+  margin-left: 20px;
   padding: 20px;
+  margin-top: 20px;
   background-color: #49BA37;
   font-size: 8vmin; 
   text-transform: uppercase;
@@ -70,29 +71,30 @@ body button {
   cursor: pointer;
 }
 
-.AddActivity {
-  display: flex;
-  flex-direction: column;
-  max-width: 300px;
-  margin: 0 auto;
+.Homepage {
+  text-align: center;
 }
 
-.AddActivity  button{
-  padding: 20px;
+.AddActivity  .saveButton{
+  padding: 15px;
   background-color: #49BA37;
-  font-size: 2rem;  
+  font-size: 1.5rem;  
   text-transform: uppercase;
   color: #fff;
   border-color: transparent;
+  float: right;
+  margin-top: 20px;
 }
 
-.AddActivity textarea {
-  padding-bottom: 40px;
-  margin-bottom: 30px;
-}
-
-.AddActivity button, .AddActivity textarea, .AddActivity input, .AddActivity h2 {
-  display: block;
+.AddActivity .backButton{
+  padding: 15px;
+  background-color: lightgray;
+  font-size: 1.5rem;  
+  text-transform: uppercase;
+  color: black;
+  border-color: transparent;
+  float: left;
+  margin-top: 20px;
 }
 
 .MenuToggle {
@@ -105,3 +107,8 @@ body button {
   border-radius: 3px;
   z-index: 1;  
 }
+
+.ql-editor{
+  min-height: 150px;
+}
+
