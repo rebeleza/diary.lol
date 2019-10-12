@@ -68,7 +68,7 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
           onClick={() => {
             setScreen('addActivity')
           }}>                    
-          ➕
+          <span role="img" aria-label="Plus Add" >➕</span> 
         </button>
       </div>
     </div>

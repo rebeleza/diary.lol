@@ -6,7 +6,7 @@ import ActivityDetail from './ActivityDetail/ActivityDetail.js';
 import SidebarMobile from './Activities/SidebarMobile.js';
 import ActivitiesList from './Activities/ActivitiesList.js';
 
-const Activities = ({ setScreen, activities }) => {
+const Activities = ({ setScreen, activities, reloadActivities, deleteActivity}) => {
 
     const [showActivities,setShowActivities] = useState(false)
     const [currentActivity, setCurrentActivity] = useState(null)
@@ -39,7 +39,12 @@ const Activities = ({ setScreen, activities }) => {
 
           <ActivityDetail 
             showActivities={showActivities} 
-            currentActivity={currentActivity}/>
+            currentActivity={currentActivity}
+            setCurrentActivity={setCurrentActivity}
+            deleteActivity={deleteActivity}
+            reloadActivities={reloadActivities}
+            setScreen={setScreen}
+            />
         </div>
    )
   }

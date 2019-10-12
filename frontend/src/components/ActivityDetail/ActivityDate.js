@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core'
-import  {useEffect} from 'react';
+//import  {useEffect} from 'react';
 
 
 const ActivityDate = ({dateTime} ) => {
@@ -12,6 +12,7 @@ const ActivityDate = ({dateTime} ) => {
     return(
         <div css={css`
             margin-top: 30px;
+            text-align: right;
         `}>           
            <div css={css`
                 font-size: 4rem;

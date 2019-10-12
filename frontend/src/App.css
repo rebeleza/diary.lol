@@ -75,7 +75,7 @@ body button {
   text-align: center;
 }
 
-.AddActivity  .saveButton{
+.saveButton{
   padding: 15px;
   background-color: #49BA37;
   font-size: 1.5rem;  
@@ -86,15 +86,28 @@ body button {
   margin-top: 20px;
 }
 
-.AddActivity .backButton{
+.backButton{
   padding: 15px;
-  background-color: lightgray;
+  background-color: lightblue;
   font-size: 1.5rem;  
   text-transform: uppercase;
   color: black;
   border-color: transparent;
   float: left;
   margin-top: 20px;
+  outline: none;    
+}
+
+.deleteButton{
+  padding: 15px;
+  background-color: rgb(228, 13, 13);
+  font-size: 1.5rem;  
+  text-transform: uppercase;
+  color: white;
+  border-color: transparent;
+  float: left;
+  margin-top: 20px;
+  outline: none;    
 }
 
 .MenuToggle {

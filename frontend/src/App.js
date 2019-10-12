@@ -28,12 +28,26 @@ const initActivities = async () => {
   return activities
 }
 
+const initKeys = async () => {
+  const db = await initDatabase()
+  const tx = await db.transaction(storeName, 'readonly')
+  const keys = tx.objectStore(storeName).getAllKeys()
+  await tx.done
+  
+  return keys
+}
+
 const getActivities = async () => {
   let activities = await initActivities()
+  let keys = await initKeys()
 
+  activities.forEach((activity, index) =>{
+    activity.key = keys[index]
+  })
+  
   //ordernar las actividades
-  activities = activities.sort((a,b) => {
-    return new Date(b.dateTime) + new Date(a.dateTime)
+  activities = activities.sort((b,a) => {
+    return new Date(b.dateTime) - new Date(a.dateTime)
   })
   
 
@@ -48,23 +62,34 @@ const storeActivity = async (activity) => {
   await tx.done
 }
 
+const deleteActivity = async key => {
+  const db = await initDatabase()
+  const tx = await db.transaction(storeName, 'readwrite')
+  const store = await tx.objectStore(storeName)
+  await store.delete(key)
+  await tx.done
+}
+
 const App = () => {
   const [screen, setScreen] = useState('activities')
   const [activities, setActivities] = useState([])
   
+  const reloadActivities = async () => {
+    const reloadActivities = await getActivities()
+    setActivities(reloadActivities)
+  }
   useEffect(() => {
     (async () => {
-        const activities = await getActivities()
-        setActivities(activities)
+      reloadActivities()
     })();
   }, [])  
 
   return (
     <div className="App">
       {screen === 'homepage' && <Homepage setScreen={setScreen}/>}
-      {screen === 'addActivityFromHomePage' && <AddActivity comingFromHomePage storeActivity={storeActivity} setScreen={setScreen}/>}
-      {screen === 'addActivity' && <AddActivity storeActivity={storeActivity} setScreen={setScreen}/>}
-      {screen === 'activities' && <Activities setScreen={setScreen} activities={activities}/>}
+      {screen === 'addActivityFromHomePage' && <AddActivity comingFromHomePage storeActivity={storeActivity} setScreen={setScreen} reloadActivities={reloadActivities}/>}
+      {screen === 'addActivity' && <AddActivity storeActivity={storeActivity} setScreen={setScreen} reloadActivities={reloadActivities}/>}
+      {screen === 'activities' && <Activities setScreen={setScreen} activities={activities} reloadActivities={reloadActivities} deleteActivity={deleteActivity}/>}
     </div>
   );
 }

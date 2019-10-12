@@ -64,14 +64,12 @@ if (!location || !location.lat || !location.lng ) {
 
     return(
         <div className="ActivityLocation" css={css`            
-        padding-top: 30px;
-        padding-bottom: 30px;
-        margin-left: 50px;
+            padding-bottom: 30px;
         `}>                       
             <div id="mapid" css={css`    
                 margin: 0 auto;                           
                 width: 100%; 
-                height: 200px;
+                height: 250px;
             `}></div>
         </div>
       
