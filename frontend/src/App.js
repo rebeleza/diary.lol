@@ -1,9 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import './App.css';
+import React, {useState, useEffect} from 'react'
+import './App.css'
+
 import Homepage from './components/Homepage'
 import AddActivity from './components/AddActivity/AddActivity'
 import Activities from './components/Activities'
+import Login from './components/Login'
+
 import {openDB} from 'idb'
+import {Router} from '@reach/router'
+
 
 const storeName = 'activities'
 
@@ -71,8 +76,8 @@ const deleteActivity = async key => {
 }
 
 const App = () => {
-  const [screen, setScreen] = useState('activities')
   const [activities, setActivities] = useState([])
+  const [loggedin, setLoggedin] = useState(false)
   
   const reloadActivities = async () => {
     const reloadActivities = await getActivities()
@@ -86,10 +91,28 @@ const App = () => {
 
   return (
     <div className="App">
-      {screen === 'homepage' && <Homepage setScreen={setScreen}/>}
-      {screen === 'addActivityFromHomePage' && <AddActivity comingFromHomePage storeActivity={storeActivity} setScreen={setScreen} reloadActivities={reloadActivities}/>}
-      {screen === 'addActivity' && <AddActivity storeActivity={storeActivity} setScreen={setScreen} reloadActivities={reloadActivities}/>}
-      {screen === 'activities' && <Activities setScreen={setScreen} activities={activities} reloadActivities={reloadActivities} deleteActivity={deleteActivity}/>}
+      <Router>
+          {<Homepage path="/"/>}
+          
+          {<AddActivity comingFromHomePage 
+                        storeActivity={storeActivity}                      
+                        reloadActivities={reloadActivities} 
+                        path="add-first-activity"/>}
+          
+          {<AddActivity storeActivity={storeActivity}
+                        reloadActivities={reloadActivities}
+                        path="add-activity"/>}
+
+          {<Login loggedin={loggedin} 
+                  setLoggedin={setLoggedin}
+                  path='login'/>}
+
+          {<Activities activities={activities} 
+                       reloadActivities={reloadActivities} 
+                       deleteActivity={deleteActivity}
+                       loggedin={loggedin}
+                       path="activities/*"/>}
+      </Router>
     </div>
   );
 }

@@ -1,11 +1,12 @@
 import React from 'react';
 import logo from '../img/logo.GIF';
 import screenshot from '../img/screenshot.png';
+import {navigate} from '@reach/router'
 
-const Homepage = ({ setScreen }) => {
+const Homepage = () => {
 
-    const addActivity = () =>{
-      setScreen('addActivityFromHomePage')
+    const addActivity = () =>{      
+      navigate('add-first-activity')
     }
   
     return(

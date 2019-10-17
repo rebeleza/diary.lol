@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import {css, jsx} from '@emotion/core'
 
-const SidebarMobile = ({ showActivities, setShowActivities, setScreen }) => {
+const SidebarMobile = ({ showActivities, setShowActivities}) => {
 
     return(        
           <ul css={css`

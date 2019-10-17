@@ -2,14 +2,20 @@
 import {css, jsx} from '@emotion/core'
 import ActivityLocation from './ActivityLocation'
 import ActivityDate from './ActivityDate' 
-import EmptyStateScreen from './EmptyStateScreen'
 import xss from 'xss'
+import {navigate} from '@reach/router'
 //import { textAlign } from '@material-ui/system'
 
-const ActivityDetail = ({ showActivities, currentActivity,  setCurrentActivity,  reloadActivities, setScreen, deleteActivity }) => {
+const ActivityDetail = ({ showActivities, currentActivity,  setCurrentActivity,  reloadActivities, deleteActivity, activityId, activities }) => {
 
-    if (!currentActivity) {
-        return    <EmptyStateScreen />
+    if (!currentActivity && activityId) {      
+        const activity = activities.filter(item => {
+          if (item.key === parseInt(activityId)) return true
+          return false
+        })[0]
+        console.log(activity)
+        setCurrentActivity(activity)
+        return ' '
     }
 
     const deleteActivityHandler = () => {
@@ -17,8 +23,8 @@ const ActivityDetail = ({ showActivities, currentActivity,  setCurrentActivity, 
        return
      }
      deleteActivity(currentActivity.key)
-     reloadActivities()
-     setScreen('activities')             
+     reloadActivities()    
+     navigate('activities')
      setCurrentActivity(null)
     }
 
@@ -48,7 +54,7 @@ const ActivityDetail = ({ showActivities, currentActivity,  setCurrentActivity, 
                   <ActivityDate dateTime = {currentActivity.dateTime} />            
                 </div>                     
             </div>
-            <div css= {css `
+            <div className="DetailDescription" css= {css `
                   font-size: 1.5rem;                
             `} dangerouslySetInnerHTML = {{ __html: xss(currentActivity.description) }} >              
             </div>

@@ -8,6 +8,12 @@
 
 body{
   font-family: 'Fresca', sans-serif;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
 }
 
 body button {
@@ -110,6 +116,15 @@ body button {
   outline: none;    
 }
 
+.loginButton{
+  padding: 15px;
+  background-color: #49BA37;
+  font-size: 1.5rem;  
+  text-transform: uppercase;
+  color: #fff;
+  border-color: transparent;
+  margin-top: 20px;
+}
 .MenuToggle {
   display: block;
   width: 33px;
@@ -125,3 +140,11 @@ body button {
   min-height: 150px;
 }
 
+.DetailDescription{
+  -webkit-touch-callout: text; /* iOS Safari */
+    -webkit-user-select: text; /* Safari */
+     -khtml-user-select: text; /* Konqueror HTML */
+       -moz-user-select: text; /* Old versions of Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+            user-select: text; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}

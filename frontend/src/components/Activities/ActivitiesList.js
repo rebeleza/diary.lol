@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 import ActivityListDate from './ActivityListDate'
+import {navigate} from '@reach/router'
 
-const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurrentActivity, setScreen }) => {
+const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurrentActivity, loggedin}) => {
 
   return (
     <div css={css`
@@ -37,8 +38,9 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
                       display: ${showActivities ? 'block' : 'none'};
                   }
                 `} onClick={() => {
-              setCurrentActivity(activity)
-              setShowActivities(false)
+                  navigate('/activities/' + activity.key)
+                  setCurrentActivity(activity)
+                  setShowActivities(false)
             }}>           
               <ActivityListDate dateTime={activity.dateTime} />                                       
               <div css={css`
@@ -66,7 +68,11 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
               `}
 
           onClick={() => {
-            setScreen('addActivity')
+            
+            if (!loggedin) {navigate('/login')
+              return
+            }
+            navigate('/add-activity')
           }}>                    
           <span role="img" aria-label="Plus Add" >➕</span> 
         </button>

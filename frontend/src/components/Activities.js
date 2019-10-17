@@ -5,8 +5,11 @@ import {css, jsx} from '@emotion/core'
 import ActivityDetail from './ActivityDetail/ActivityDetail.js';
 import SidebarMobile from './Activities/SidebarMobile.js';
 import ActivitiesList from './Activities/ActivitiesList.js';
+import EmptyStateScreen from './Activities/EmptyStateScreen'
 
-const Activities = ({ setScreen, activities, reloadActivities, deleteActivity}) => {
+import {Router} from '@reach/router'
+
+const Activities = ({ activities, reloadActivities, deleteActivity, loggedin}) => {
 
     const [showActivities,setShowActivities] = useState(false)
     const [currentActivity, setCurrentActivity] = useState(null)
@@ -30,21 +33,26 @@ const Activities = ({ setScreen, activities, reloadActivities, deleteActivity}) 
             showActivities={showActivities} 
             setShowActivities={setShowActivities}             
             setCurrentActivity={setCurrentActivity}
-            setScreen={setScreen}/>         
+            loggedin={loggedin}
+            />         
           
           <SidebarMobile 
             showActivities={showActivities} 
             setShowActivities={setShowActivities}
-            setScreen={setScreen}/>            
+          />            
 
-          <ActivityDetail 
-            showActivities={showActivities} 
-            currentActivity={currentActivity}
-            setCurrentActivity={setCurrentActivity}
-            deleteActivity={deleteActivity}
-            reloadActivities={reloadActivities}
-            setScreen={setScreen}
-            />
+          <Router>
+              <ActivityDetail 
+                showActivities={showActivities} 
+                currentActivity={currentActivity}
+                setCurrentActivity={setCurrentActivity}
+                deleteActivity={deleteActivity}
+                reloadActivities={reloadActivities}           
+                activities={activities}
+                path="/:activityId"                
+                />
+              <EmptyStateScreen path='/' />
+            </Router>            
         </div>
    )
   }

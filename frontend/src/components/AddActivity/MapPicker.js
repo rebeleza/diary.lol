@@ -10,22 +10,28 @@ const initalizeMap = (location, setLocation) =>{
     const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 		osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
-            
-     mapInstance = L.map('mapid').setView([location.lat|| 51.505 
-        , location.lng || -0.09], 13).addLayer(osm);	
 
-	L.circle([location.lat|| 51.505 
-        , location.lng || -0.09],150, {
+        mapInstance = L.map('mapid')
+// recuperar geolocation
+window.navigator.geolocation.getCurrentPosition(position => {    
+    
+    if (!mapInstance){
+        return
+    }
+    const latlng = [location.lat|| position.coords.latitude, location.lng || position.coords.longitude]
+    
+    mapInstance = mapInstance.setView(latlng, 13).addLayer(osm);	
+
+	L.circle(latlng,150, {
             color: 'red',
             opacity: 0.6,
             fillColor: '#f03',
             fillOpacity: 0.5
         }).addTo(mapInstance).bindPopup("<b>Activity Location</b><br />").openPopup();
     
-    L.marker([location.lat|| 51.505 
-            , location.lng || -0.09]).addTo(mapInstance).bindPopup("Activity Location").openPopup();
-
-	mapInstance.on('click', event => {  
+    L.marker(latlng).addTo(mapInstance).bindPopup("Activity Location").openPopup();
+    
+    mapInstance.on('click', event => {  
         
         setLocation({
             lat: event.latlng.lat,
@@ -37,6 +43,12 @@ const initalizeMap = (location, setLocation) =>{
 			.setContent("Activity Location " + event.latlng.toString())
 			.openOn(mapInstance)
 	});
+
+}, error => {
+    console.log(error)
+},{
+})        
+    	
 }
 
 const MapPicker = ({location, setLocation} ) => {
@@ -46,7 +58,7 @@ useEffect(() => {
 
     return () => {
         mapInstance.off();
-        mapInstance.remove();         
+        mapInstance.remove();   //comentado por error en back en map llamando a setView
     }
 }, [location, setLocation])  
 
