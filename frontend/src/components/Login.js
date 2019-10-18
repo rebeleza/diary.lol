@@ -33,7 +33,7 @@ const Login = ({loggedin }) => {
             return
         }
 
-        if( password !=  passwordConfirmation){
+        if( password !==  passwordConfirmation){
             alert('Please enter the same value in both password fields')
             return
         }
@@ -41,15 +41,37 @@ const Login = ({loggedin }) => {
         setEmail(xss(email))
         setPassword(xss(password))
         setPasswordConfirmation(xss(passwordConfirmation))
-        
-        alert('Begin cap 27 - authentication')
-        
-    //     setDescription(xss(description))
-    //     setTitle(xss(title))
-        
-    //     storeActivity({ title,location, description, dateTime })
-    //     reloadActivities()        
-         navigate('activities')
+                
+        const url = 'http://localhost:3001/register'
+        const options = {
+            method: 'post',
+            headers:{
+                'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: `email=${email}&password=${password}&passwordConfirmation=${passwordConfirmation}`
+        }
+
+        fetch(url, options).then(response => {
+            if (!response.ok){                
+                if (response.status === 400) {
+                    alert('Email already exist, please entry another')
+                }
+                if (response.status === 404) {
+                    alert('Email not exist, please retry')
+                }
+                if (response.status === 401) {
+                    alert('Error with email and password, please retry')
+                }
+            }
+            return response
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.succes) {
+                document.cookie = 'token=' + data.token                
+                navigate('/add-activity')
+            }
+        })         
     }
 
     return(
@@ -62,8 +84,7 @@ const Login = ({loggedin }) => {
             <div css={css`
                 display: grid;
                 grid-template-rows: 100px 100px 100px;     
-                padding-top: 20px;  
-                
+                padding-top: 20px;                  
             `}>
                 <div  css={css`
                     @media (max-width: 800px){
@@ -93,7 +114,7 @@ const Login = ({loggedin }) => {
                 `} onChange={event => setPassword(event.target.value)}
                 placeholder='Enter your password'/>            
                 </div>                
-                <div  type="password" css={css`
+                <div  css={css`
                     @media (max-width: 800px){
                         display: block;
                         margin-left: auto;
@@ -108,7 +129,13 @@ const Login = ({loggedin }) => {
                 placeholder='Repit your password'/>            
                 </div>                
             </div>   
-            <div>
+            <div  css={css`
+                    @media (max-width: 800px){
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                       }                   
+                `}>
                 <button  className="loginButton" onClick={doLogin}> Login </button>
             </div>               
         </form>
