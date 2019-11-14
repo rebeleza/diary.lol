@@ -2,6 +2,7 @@
 import {css, jsx} from '@emotion/core'
 import ActivityLocation from './ActivityLocation'
 import ActivityDate from './ActivityDate' 
+import EmptyStateScreen from '../Activities/EmptyStateScreen'
 import xss from 'xss'
 import {navigate} from '@reach/router'
 //import { textAlign } from '@material-ui/system'
@@ -15,7 +16,7 @@ const ActivityDetail = ({ showActivities, currentActivity,  setCurrentActivity, 
         })[0]
         console.log(activity)
         setCurrentActivity(activity)
-        return ' '
+        return <EmptyStateScreen />
     }
 
     const deleteActivityHandler = () => {

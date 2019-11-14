@@ -1,9 +1,14 @@
 // usamos import por que es js module sintax, pero
 // usamos require en el lado del server que es el js comun
 
+// npm init --y 
 // npm install express apollo-server-express bcrypt jsonwebtoken cors
 // npm install xss
-// npm install -g nodemon  -> nodemon index.js
+// npm install -g nodemon  
+// npm install graphql
+
+/**  para iniciar el server -> nodemon index.js -----------*/
+
 const xss = require('xss')
 
 const express = require('express')
@@ -11,19 +16,96 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const {
+    ApolloServer,
+    gql,
+    AuthenticationError
+} = require('apollo-server-express')
+
+const SECRET_KEY = 'y4m3rit0m4n1t0'
+
 const users = [{
     email: 'your@email.com',
     password: '$2y$10$3Il0HdyaiucwLUjaQ5b.feci7ipjChx2DpE5BemX.BVIjuJwkjL7u' // ssecrett
 }]
+
+const activities= [	
+        {
+         title: "Work Party - Good bye Subse Lily Murisi", 
+         location: {lat: -38.988368562404126, lng: -67.99275398254396}, 
+         description: "Buena fiesta para despedir el año y muchas cosas mas", 
+         dateTime: '02-11-2019T21:15:00Z'
+        },
+        {
+         title: "Going to Park", 
+         location: {lat: 51.49324784798508, lng: -0.05287170410156251}, 
+         description: "<p>We went to the park the last saturday</p>", 
+         dateTime: '12-12-2019T17:00:00Z'
+        },
+        {
+         title: "Play Basketball", 
+         location: {lat: -38.95330170738426, lng: -68.05416584014894}, 
+         description: "<p>Play with La Colonia vs Deluxe</p>", 
+         dateTime: '18-10-2019T22:30:00Z'
+        }            
+]
+
+// se define el esquema
+const typeDefs = gql`
+    type Location {
+        lat: String!
+        lng: String!
+    }
+
+    type Activities {        
+        title: String!
+        description: String!
+        datetime: String!
+        location:  Location      
+    } 
+
+    type Query {
+        activities: [Activities]
+    }
+`
+// Error: "Query" defined in resolvers, but not in schema, debo agregar type query en  schema
+// definimos los resolvers
+const resolvers = {
+    Query: {
+        activities: (root, args) => {
+            return activities
+        }
+    }
+}
+
+// definimos el context para chequear que el usuario está autorizado
+const context = ({ req }) => {
+    const token = req.headers.authorization || ''
+    
+    try {        
+        const { email } = jwt.verify(token.split(' ')[1], SECRET_KEY)
+    }catch(err) {
+        throw new AuthenticationError('Authentication error, JWT invalid')
+    }
+}
+
+// iniciamos el apollo server
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context
+})
+
 const app = express()
+// con este middleware se conecta express con apollo
+
+server.applyMiddleware({ app })
 
 //middleware
-
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 
-const getToken = email => {
-    const SECRET_KEY = 'y4m3rit0m4n1t0'
+const getToken = email => {    
     return token = jwt.sign({
         email: email,         
     }, SECRET_KEY)    
@@ -33,9 +115,7 @@ app.post('/register', async (req, res) => {
     const { email, password, passwordConfirmation } = req.body
     
     //const theUser = users.find( user => { return user.email === email }) idem sin return
-    const theUser = users.find( user => user.email === email)
-    
-    console.log(' the user: ' +theUser)
+    const theUser = users.find( user => user.email === email)        
 
     if (theUser){
         // cod 400 - bad request
@@ -46,9 +126,6 @@ app.post('/register', async (req, res) => {
     return
     }
     
-    // const match = bcrypt.compare(password, theUser.password)
-    //bcrypt.hash       
-
     if (!email){
         res.status(401).send({
             succes: false,
@@ -88,8 +165,8 @@ app.post('/register', async (req, res) => {
     
     //guardo user en array
     users.push({
-        email: email,
-        password: passHash
+        email: xss(email),
+        password: xss(passHash)
     })
 
     console.log(users)
@@ -104,13 +181,13 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body
 
     //const theUser = users.find( user => { return user.email === email }) idem sin return
-    const theUser = users.find( user => { user.email === email })
+    const theUser = users.find( user =>  user.email === email )
 
     if (!theUser){
         // cod 404 - not found
         res.status(404).send({
             succes: false,
-            message: 'No se pudo encontrar la cuenta: {$email}'
+            message: 'Email not found: {$email}'
         })
         return
     }

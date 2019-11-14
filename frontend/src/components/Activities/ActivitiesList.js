@@ -3,6 +3,9 @@ import { css, jsx } from '@emotion/core'
 import ActivityListDate from './ActivityListDate'
 import {navigate} from '@reach/router'
 
+import { gql } from 'apollo-boost'
+import { Query } from 'react-apollo'
+ 
 const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurrentActivity, loggedin}) => {
 
   return (
@@ -19,6 +22,28 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
     display: grid;
     grid-template-rows: auto 80px;
     `}>
+      <Query
+        query={gql`
+            { 
+            activities{
+                  title 
+                  description
+                  datetime
+                }
+              }
+          `}
+      >
+          {({ loading, error, data }) => {
+            if (loading) return <p>Loading</p>
+            if (error) {
+               // navigate ('/')
+              // console.error(error)
+                return <p></p>
+            }
+            console.log(data)
+            return <ul>{data.activities.map(item => <li key={item.title}> {item.title} </li> )}</ul>
+            }}
+      </Query>
       <ul className="List" css={css`              
           list-style-type: none;
         `}>
@@ -69,7 +94,7 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
 
           onClick={() => {
             
-            if (!loggedin) {navigate('/login')
+            if (!loggedin) {navigate('/register')
               return
             }
             navigate('/add-activity')
