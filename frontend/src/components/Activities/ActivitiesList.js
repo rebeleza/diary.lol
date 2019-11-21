@@ -20,7 +20,7 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
     }
 
     display: grid;
-    grid-template-rows: auto 80px;
+    grid-template-rows: 1px auto 80px;
     `}>
       <Query
         query={gql`
