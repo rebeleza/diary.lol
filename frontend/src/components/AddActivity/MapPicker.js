@@ -57,8 +57,10 @@ useEffect(() => {
     initalizeMap(location, setLocation)
 
     return () => {
-        mapInstance.off();
-        mapInstance.remove();   //comentado por error en back en map llamando a setView
+        if (!mapInstance) return
+        
+        mapInstance.off();    
+        mapInstance.remove();           
     }
 }, [location, setLocation])  
 

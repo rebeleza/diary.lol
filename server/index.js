@@ -6,6 +6,7 @@
 // npm install xss
 // npm install -g nodemon  
 // npm install graphql
+// npm install cookie-parser
 
 /**  para iniciar el server -> nodemon index.js -----------*/
 
@@ -15,6 +16,7 @@ const express = require('express')
 const cors = require('cors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 const {
     ApolloServer,
@@ -80,8 +82,9 @@ const resolvers = {
 
 // definimos el context para chequear que el usuario está autorizado
 const context = ({ req }) => {
-    const token = req.headers.authorization || ''
     
+    // const token = req.headers.authorization || ''   // lo comento por que ahora obtengo por req.cookies
+    const token = req.cookies['token'] || ''
     try {        
         const { email } = jwt.verify(token.split(' ')[1], SECRET_KEY)
     }catch(err) {
@@ -93,16 +96,24 @@ const context = ({ req }) => {
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context
+    context,
+    cors: false  // deshabilito cors en apollo
 })
 
 const app = express()
 // con este middleware se conecta express con apollo
 
-server.applyMiddleware({ app })
+server.applyMiddleware({ app, cors:false })
 
 //middleware
-app.use(cors())
+const corsOptions = {     
+    credentials: true,
+    origin: 'http://localhost:3000'
+}
+
+app.use(cors(corsOptions))
+app.use(cookieParser())
+
 app.use(express.urlencoded({ extended: true }))
 
 const getToken = email => {    
@@ -171,9 +182,15 @@ app.post('/register', async (req, res) => {
 
     console.log(users)
 
+    // antes de envíar true, hay que setear la cookie
+    res.cookie('token', getToken(email), 
+        {httpOnly: true
+         //,secure:true
+    })
+
     res.send({
-        succes: true,
-        token: getToken(email)
+        succes: true 
+        //,token: getToken(email)
     })
 })
 
@@ -202,9 +219,15 @@ app.post('/login', async (req, res) => {
         return
     }
     
+    // antes de envíar true, hay que setear la cookie
+    res.cookie('token', getToken(email), 
+        {httpOnly: true
+         //,secure:true
+    })
+
     res.send({
-        succes: true,
-        token: getToken(theUser.email)
+        succes: true 
+        //,token: getToken(email)
     })
 })
 
