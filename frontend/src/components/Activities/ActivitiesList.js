@@ -41,6 +41,7 @@ const ActivitiesList = ({ activities, showActivities, setShowActivities, setCurr
                 return <p></p>
             }
             console.log(data)
+            if(!data || !data.activities) return ''
             return <ul>{data.activities.map(item => <li key={item.title}> {item.title} </li> )}</ul>
             }}
       </Query>

@@ -48,7 +48,8 @@ const Register = ({ setLoggedin }) => {
             headers:{
                 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
-            body: `email=${email}&password=${password}&passwordConfirmation=${passwordConfirmation}`
+            body: `email=${email}&password=${password}&passwordConfirmation=${passwordConfirmation}`,
+            credentials: 'include'
         }
 
         fetch(url, options).then(response => {
@@ -68,7 +69,8 @@ const Register = ({ setLoggedin }) => {
         .then(response => response.json())
         .then(data => {
             if (data.succes) {
-                document.cookie = 'token=' + data.token      
+                //document.cookie = 'signed=true' + data.token      
+                document.cookie = 'signed=true' 
                 setLoggedin(true)                          
                 navigate('/add-activity')
             }

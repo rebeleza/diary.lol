@@ -4,6 +4,7 @@ import {useState} from 'react'
 
 import xss from 'xss'
 import {navigate} from '@reach/router'
+import { shouldInclude } from 'apollo-utilities'
 
 const Login = ({ setLoggedin }) => {
     const [email, setEmail] = useState('')
@@ -37,7 +38,8 @@ const Login = ({ setLoggedin }) => {
             headers:{
                 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
-            body: `email=${email}&password=${password}`
+            body: `email=${email}&password=${password}`,            
+            credentials: 'include'
         }
 
         fetch(url, options).then(response => {
@@ -57,7 +59,8 @@ const Login = ({ setLoggedin }) => {
         .then(response => response.json())
         .then(data => {
             if (data.succes) {
-                document.cookie = 'token=' + data.token
+                //document.cookie = 'token=' + data.token
+                document.cookie = 'signedin=true' 
                 setLoggedin(true)
                 navigate('/add-activity')
             }

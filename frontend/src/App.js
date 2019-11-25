@@ -21,10 +21,12 @@ import { setContext } from 'apollo-link-context'
 //import gql from 'graphql-tag'
 
 const httplink = new HttpLink ({
-  uri: 'http://localhost:3001/graphql'
+  uri: 'http://localhost:3001/graphql',
+  credentials: 'include'
 })
 
 // pasar la autorización
+/* lo comento por que ahora le estoy diciendo a apollo que incluya las credenciales de cookies automaticamente
 const authLink = setContext((_,{headers} ) => {
   return {
       headers: {
@@ -32,10 +34,11 @@ const authLink = setContext((_,{headers} ) => {
         authorization: `Beearer ${Cookies.get('token')}`
       }
   }
-})
+})*/
 
 const client = new ApolloClient({
-  link: authLink.concat(httplink),
+  //link: authLink.concat(httplink),
+  link : httplink,
   cache: new InMemoryCache()
 })
 
@@ -106,7 +109,7 @@ const deleteActivity = async key => {
 
 const App = () => {
   const [activities, setActivities] = useState([])
-  const [loggedin, setLoggedin] = useState(!!Cookies.get('token'))
+  const [loggedin, setLoggedin] = useState(!!Cookies.get('signedin'))
   
   const reloadActivities = async () => {
     const reloadActivities = await getActivities()
