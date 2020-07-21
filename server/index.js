@@ -52,14 +52,15 @@ const activities= [
         }            
 ]
 
-// se define el esquema
+// se define el graphql esquema
 const typeDefs = gql`
     type Location {
         lat: String!
         lng: String!
     }
 
-    type Activities {        
+    type Activity {        
+        id: String!
         title: String!
         description: String!
         datetime: String!
@@ -67,15 +68,37 @@ const typeDefs = gql`
     } 
 
     type Query {
-        activities: [Activities]
+        activities: [Activity]
     }
+    
+    type Mutation {
+        addActivity(
+            title: String!
+            description: String!
+            datetime: String!
+            lat: String!
+            lng: String!     
+        ) : Activity
+    }
+
 `
+
 // Error: "Query" defined in resolvers, but not in schema, debo agregar type query en  schema
-// definimos los resolvers
+// definimos los resolvers 
 const resolvers = {
     Query: {
         activities: (root, args) => {
             return activities
+        }
+    },
+    Mutation: {
+        addActivity: (root, args) =>{
+            console.log(args.title, args.description, args.datetime, args.lat, args.lng)
+            
+            return {
+                "id": "id",
+                "test": "hello!"
+            }
         }
     }
 }
@@ -83,17 +106,21 @@ const resolvers = {
 // definimos el context para chequear que el usuario está autorizado
 const context = ({ req }) => {
     
-    // const token = req.headers.authorization || ''   // lo comento por que ahora obtengo por req.cookies
-    const token = req.cookies['token'] || ''
+     //const token = req.headers.authorization || ''   // lo comento por que ahora obtengo por req.cookies
+    console.log('cookies ' ,req.cookies['token'])
+    const token = req.cookies['token'] || ''    
+
     try {        
-        const { email } = jwt.verify(token.split(' ')[1], SECRET_KEY)
+        const { email } = jwt.verify(token, SECRET_KEY)
     }catch(err) {
         throw new AuthenticationError('Authentication error, JWT invalid')
     }
+
+    return res.send('No cookie found')
 }
 
 // iniciamos el apollo server
-const server = new ApolloServer({
+const server = new ApolloServer({    
     typeDefs,
     resolvers,
     context,
@@ -102,18 +129,19 @@ const server = new ApolloServer({
 
 const app = express()
 // con este middleware se conecta express con apollo
-
-server.applyMiddleware({ app, cors:false })
+//server.applyMiddleware({ app, cors:false })
 
 //middleware
-const corsOptions = {     
-    credentials: true,
-    origin: 'http://localhost:3000'
+const corsOptions = {         
+    origin: 'http://localhost:3000', // url del cliente
+    credentials: true
 }
 
-app.use(cors(corsOptions))
-app.use(cookieParser())
+server.applyMiddleware({ app, cors:corsOptions })
 
+app.use(cors(corsOptions))
+//app.use(cors())
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 
 const getToken = email => {    
@@ -183,15 +211,15 @@ app.post('/register', async (req, res) => {
     console.log(users)
 
     // antes de envíar true, hay que setear la cookie
-    res.cookie('token', getToken(email), 
-        {httpOnly: true
-         //,secure:true
+    res.cookie('token', getToken(email), { 
+        httpOnly: true
+         //,secure:true  //on HTTPS
     })
 
     res.send({
         succes: true 
         //,token: getToken(email)
-    })
+    })    
 })
 
 app.post('/login', async (req, res) => {
@@ -220,8 +248,8 @@ app.post('/login', async (req, res) => {
     }
     
     // antes de envíar true, hay que setear la cookie
-    res.cookie('token', getToken(email), 
-        {httpOnly: true
+    res.cookie('token', getToken(email), {
+         httpOnly: true
          //,secure:true
     })
 

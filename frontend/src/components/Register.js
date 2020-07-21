@@ -70,7 +70,7 @@ const Register = ({ setLoggedin }) => {
         .then(data => {
             if (data.succes) {
                 //document.cookie = 'signed=true' + data.token      
-                document.cookie = 'signed=true' 
+                document.cookie = 'signedin=true' 
                 setLoggedin(true)                          
                 navigate('/add-activity')
             }

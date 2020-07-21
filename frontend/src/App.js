@@ -14,14 +14,16 @@ import {Router} from '@reach/router'
 import Cookies from 'js-cookie'
 
 import { ApolloClient} from 'apollo-client'
-import { HttpLink} from 'apollo-link-http'
+import { createHttpLink} from 'apollo-link-http'
 import { InMemoryCache} from 'apollo-cache-inmemory'
 import { ApolloProvider} from 'react-apollo'
-import { setContext } from 'apollo-link-context'
-//import gql from 'graphql-tag'
+//import { setContext } from 'apollo-link-context'
 
-const httplink = new HttpLink ({
-  uri: 'http://localhost:3001/graphql',
+import gql from 'apollo-boost'
+// import gql from 'graphql-tag'
+
+const httplink = createHttpLink ({
+  uri: 'http://localhost:3001/graphql', //url del server
   credentials: 'include'
 })
 
@@ -92,11 +94,50 @@ const getActivities = async () => {
 }
 
 const storeActivity = async (activity) => {
+  // agregar graphql query
+  const ADD_ACTIVITY_MUTATION = gql`
+    mutation AddActivity(
+            $title: String!,
+            $description: String!,
+            $datetime: String!,
+            $lat: String!,
+            $lng: String!
+    ) {
+      addActivity(
+            title: $title,
+            description: $description,
+            datetime: $datetime,
+            lat: $lat,
+            lng: $lng 
+      ){
+        id
+        title
+      }
+    }
+  `
+
+  client.mutate({
+    mutation: ADD_ACTIVITY_MUTATION, 
+    variables: {
+            title: "test",
+            description: "test",
+            datetime: "test",
+            lat: "test",
+            lng: "test" 
+    }
+  }).then(data => {
+    console.log(data)
+  })
+  
+  return 
+
+  /* se va a usar en modo offline
   const db = await initDatabase()
   const tx = await db.transaction(storeName, 'readwrite')
   const store = await tx.objectStore(storeName)
   await store.put(activity)
   await tx.done
+  */
 }
 
 const deleteActivity = async key => {
